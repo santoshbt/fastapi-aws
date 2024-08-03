@@ -9,10 +9,12 @@ load_dotenv()
 
 Base = declarative_base()
 
-if os.getenv("DEPLOYMENT_ENVIRONMENT") == 'DEV':
-    engine = create_engine(os.getenv("DB_URL"), connect_args={'check_same_thread': False})
-else:
-    engine = create_engine(os.getenv("DB_URL"))
+# if os.getenv("DEPLOYMENT_ENVIRONMENT") == 'DEV':
+#     engine = create_engine(os.getenv("DB_URL"), connect_args={'check_same_thread': False})
+# else:
+#     engine = create_engine(os.getenv("DB_URL"))
+
+engine = create_engine("postgresql://rootuser:Password123*@fastapi-aws-database.cxgcqqm6ejkc.us-east-2.rds.amazonaws.com:5432/postgres")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -26,7 +28,7 @@ class User(Base):
     dogs = relationship("Dog", back_populates="owner")
     posts = relationship("Post", back_populates="user")
     images = relationship("Image", back_populates="owner", uselist=False)
-    
+
 class Image(Base):
     __tablename__ = 'images'
     id = Column(Integer, primary_key=True, index=True)
